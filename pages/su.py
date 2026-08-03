@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("Student's Union Financial Dashboard")
+st.title("Students' Union Financial Dashboard")
 
 back = st.button("Exit to Login")
 
