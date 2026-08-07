@@ -21,7 +21,7 @@ if submit:
     f.write(club)
 
     if pwd == data[club]:
-        st.success("Login successful!")
+        st.success("Login successful")
 
         if club != "Students' Union":
             st.switch_page("pages/club.py")

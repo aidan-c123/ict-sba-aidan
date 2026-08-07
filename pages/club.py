@@ -2,7 +2,10 @@ import streamlit as st
 
 f = open("id.txt", "r")
 info = f.readlines()
-st.title(f"{info[0].strip()} Financial Dashboard")
+
+club = info[0].strip()
+
+st.title(f"{club} Financial Dashboard")
 
 back = st.button("Exit to Login")
 
