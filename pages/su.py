@@ -8,7 +8,7 @@ data = json.load(login)
 
 st.title("Students' Union Financial Dashboard")
 
-add, view = st.tabs(["Add Record", "View Records"])
+add, delete, view = st.tabs(["Add Record", "Delete Record", "View Records"])
 
 with add:
     with st.form("inputRecord"):
@@ -29,9 +29,13 @@ if submit:
             writer.writerow([record_id, club, name, -amount, date, expenseType])
     st.success("Submitted!")
 
+with delete:
+    pass
+
 with view:
+    with open('records.csv', 'r', newline="") as file:
+        pass
 
-
-back = st.button("Logout")
-if back:
+leave = st.button("Logout")
+if leave:
     st.switch_page("app.py")
