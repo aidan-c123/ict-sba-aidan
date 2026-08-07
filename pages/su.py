@@ -14,9 +14,9 @@ with add:
     with st.form("inputRecord"):
         club = st.selectbox("Club:", list(data.keys()), index=None, placeholder="Select club...")
         name = st.text_input("Item Name:")
-        amount = st.number_input("Amount ($):")
-        date = st.date_input("Date:")
         expenseType = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
+        amount = st.number_input("Amount ($):", min_value=0.0)
+        date = st.date_input("Date:")
         submit = st.form_submit_button("Submit")
 
 if submit:
