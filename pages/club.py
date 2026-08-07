@@ -2,7 +2,7 @@ import streamlit as st
 
 f = open("id.txt", "r")
 info = f.readlines()
-
+f.close()
 club = info[0].strip()
 
 st.title(f"{club} Financial Dashboard")
