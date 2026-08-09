@@ -10,7 +10,18 @@ login.close()
 
 st.title("Students' Union Financial Dashboard")
 
-add, delete, view = st.tabs(["Add Record", "Delete Record", "View Records"])
+view, add, delete = st.tabs(["View Records", "Add Record", "Delete Record"])
+
+with view:
+    df = pd.read_csv('records.csv').sort_values(by="Date", ascending=False)
+
+    st.dataframe(
+        df,
+        column_config={
+            "UUID": st.column_config.Column(width="small"),
+            "Amount": st.column_config.NumberColumn("Amount", format="dollar")
+        }
+    )
 
 with add:
 
@@ -31,21 +42,14 @@ if submit:
         record_id = str(uuid.uuid4())
 
         if expenseType == "Income":
-            writer.writerow([record_id, club, name, amount, date, expenseType])
+            writer.writerow([record_id, club, name, expenseType, amount, date])
 
         else:
-            writer.writerow([record_id, club, name, -amount, date, expenseType])
+            writer.writerow([record_id, club, name, expenseType, -amount, date,])
     st.success("Submitted!")
 
 with delete:
     pass
-
-with view:
-    df = pd.read_csv('records.csv')
-    st.table(df)
-    
-    
-        
 
 leave = st.button("Logout")
 if leave:

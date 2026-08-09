@@ -9,7 +9,7 @@ f = open("id.txt", "w")
 club = ""
 login = open("login.json", "r")
 data = json.load(login)
-f.close()
+
 
 club = st.selectbox("What is your club?", list(data.keys()), index=None, placeholder="Select club...")
 
@@ -32,3 +32,5 @@ if submit:
 
     else:
         st.error("Incorrect password")
+
+f.close()
