@@ -13,10 +13,13 @@ st.title("Students' Union Financial Dashboard")
 view, add, delete = st.tabs(["View Records", "Add Record", "Delete Record"])
 
 with view:
+    st.header("Summary")
     df = pd.read_csv('records.csv').sort_values(by="Date", ascending=False)
+    copy = df.copy()
+    copy["Amount"] = copy["Amount"].abs()
 
     st.dataframe(
-        df,
+        copy,
         column_config={
             "UUID": st.column_config.Column(width="small"),
             "Amount": st.column_config.NumberColumn("Amount", format="dollar")
@@ -24,7 +27,6 @@ with view:
     )
 
 with add:
-
     with st.form("inputRecord", clear_on_submit=True):
         club = st.selectbox("Club:", list(data.keys()), index=None, placeholder="Select club...")
         name = st.text_input("Item Name:")
@@ -47,6 +49,7 @@ if submit:
         else:
             writer.writerow([record_id, club, name, expenseType, -amount, date,])
     st.success("Submitted!")
+    st.rerun()
 
 with delete:
     pass
