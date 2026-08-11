@@ -11,9 +11,9 @@ login = open("login.json", "r")
 data = json.load(login)
 
 
-club = st.selectbox("What is your club?", list(data.keys()), index=None, placeholder="Select club...")
+club = st.selectbox("Club:", list(data.keys()), index=None, placeholder="Select club...")
 
-pwd = st.text_input("Password", type="password")
+pwd = st.text_input("Password:", type="password")
 
 
 submit = st.button("Login")
