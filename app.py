@@ -28,7 +28,7 @@ if submit:
             st.switch_page("pages/club.py")
 
         else:
-            st.switch_page("pages/su.py")
+            st.switch_page("pages/admin.py")
 
     else:
         st.error("Incorrect password")
