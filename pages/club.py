@@ -4,6 +4,7 @@ import csv
 import uuid
 import pandas as pd
 import time
+import numpy as np
 
 f = open("id.txt", "r")
 info = f.readlines()
@@ -19,7 +20,15 @@ copy = df.copy()[df["Club"] == club]
 copy["Amount"] = copy["Amount"].abs()
 
 with view:
-    st.header("Summary")
+    st.header(f"{club} Financial Report")
+
+    st.subheader("Students' Union Financial Summary")
+    total_income = df[np.logical_and(df["Type"]=="Income", df["Club"] == club)]["Amount"].sum()
+    total_expense = -df[np.logical_and(df["Type"]=="Expense", df["Club"] == club)]["Amount"].sum()
+    st.write(f"Total income = {total_income}")
+    st.write(f"Total expenditure = {total_expense}")
+    st.write(f"Balance = {total_income - total_expense}")
+    
     
     st.dataframe(
         copy,
