@@ -1,7 +1,5 @@
 import streamlit as st
 import json
-import csv
-import uuid
 import pandas as pd
 import time
 import numpy as np
