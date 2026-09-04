@@ -42,6 +42,7 @@ with view:
 with add:
     with st.form("inputRecord", clear_on_submit=True):
         name = st.text_input("Item Name:")
+        desc = st.text_input("Item Description")
         expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
         amount = st.number_input("Amount ($):", min_value=0.0)
         date = st.date_input("Date:")
@@ -54,10 +55,10 @@ if add_submit:
         record_id = str(uuid.uuid4())
 
         if expense_type == "Income":
-            writer.writerow([record_id, club, name, expense_type, amount, date])
+            writer.writerow([record_id, club, name, desc, expense_type, amount, date])
 
         else:
-            writer.writerow([record_id, club, name, expense_type, -amount, date])
+            writer.writerow([record_id, club, name, desc, expense_type, -amount, date])
     st.success("Submitted!")
     time.sleep(2)
     st.rerun()
@@ -101,6 +102,7 @@ with update:
             with st.form("update_items", clear_on_submit=True):
                 st.write("Leave input blank if it is not needed to be updated:")
                 name = st.text_input("Item Name:")
+                desc = st.text_input("Item Description")
                 expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
                 amount = st.number_input("Amount ($):", min_value=0.0, value=None)
                 date = st.date_input("Date:", value = None)
@@ -108,10 +110,10 @@ with update:
 
             if update_confirm:
                 if expense_type == "Income" or amount == None:
-                    update_dict = {"Club" : club, "Item Name": name, "Type" : expense_type, "Amount": amount,"Date": date}
+                    update_dict = {"Club" : club, "Item Name": name, "Item Desc": desc, "Type" : expense_type, "Amount": amount,"Date": date}
 
                 else:
-                    update_dict = {"Club" : club, "Item Name": name, "Type" : expense_type, "Amount": -amount,"Date": date}
+                    update_dict = {"Club" : club, "Item Name": name, "Item Desc": desc, "Type" : expense_type, "Amount": -amount,"Date": date}
                 
                 for i in list(update_dict.keys()):
                     if update_dict[i] is not None and update_dict[i] != "":

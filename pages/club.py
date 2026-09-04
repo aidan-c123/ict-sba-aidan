@@ -1,6 +1,7 @@
 import streamlit as st
 import json
 import pandas as pd
+import uuid
 import time
 import numpy as np
 
@@ -19,7 +20,7 @@ if "df" not in st.session_state:
 
 st.header("Club Financial Report")
 
-st.subheader("Students' Union Financial Summary")
+st.subheader(f"{club} Financial Summary")
 total_income = df[np.logical_and(df["Type"]=="Income", df["Club"] == "Students' Union")]["Amount"].sum()
 total_expense = df[np.logical_and(df["Type"]=="Expense", df["Club"] == "Students' Union")]["Amount"].sum()
 st.write(f"Total income = ${total_income}")
@@ -33,7 +34,7 @@ if st.button("Save Changes"):
     st.rerun()
 
 st.session_state.df = st.data_editor(
-    df,
+    df[df["Club"]==club],
     hide_index=True,
     column_config={
         "Club": st.column_config.SelectboxColumn(options = [club]),

@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import pandas as pd
 import time
+import uuid
 import numpy as np
 
 login = open("login.json", "r")
@@ -37,6 +38,8 @@ with col2:
     st.write(f"Balance = ${total_income - total_expense}")
 
 if st.button("Save Changes"):
+    missing = st.session_state.df["UUID"].isna() | (st.session_state.df["UUID"] == "")
+    st.session_state.df.loc[missing, "UUID"] = [str(uuid.uuid4()) for _ in range(missing.sum())]
     st.session_state.df.to_csv("records.csv", index = False)
     st.success("Saved!")
     time.sleep(1)
@@ -46,13 +49,17 @@ st.session_state.df = st.data_editor(
     df,
     hide_index=True,
     column_config={
-        "Club": st.column_config.SelectboxColumn(options = data.keys()),
+        "Club": st.column_config.SelectboxColumn(options = list(data.keys())),
         "Amount": st.column_config.NumberColumn("Amount", format="dollar"),
         "Date": st.column_config.DateColumn(format="DD.MM.YYYY"),
-        "Type": st.column_config.SelectboxColumn(options = ["Income", "Expense"])
+        "Type": st.column_config.SelectboxColumn(options = ["Income", "Expense"]),
+        "UUID": st.column_config.Column(width=1)
     },
-    num_rows="dynamic"
+    num_rows="dynamic",
+    disabled=["UUID"]
+
 )
+
 
 with st.bottom:
     leave = st.button("Logout")

@@ -52,6 +52,7 @@ with add:
     with st.form("inputRecord", clear_on_submit=True):
         club = st.selectbox("Club:", list(data.keys()), index=None, placeholder="Select club...")
         name = st.text_input("Item Name:")
+        desc = st.text_input("Item Description")
         expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
         amount = st.number_input("Amount ($):", min_value=0.0)
         date = st.date_input("Date:")
@@ -64,10 +65,10 @@ if add_submit:
         record_id = str(uuid.uuid4())
 
         if expense_type == "Income":
-            writer.writerow([record_id, club, name, expense_type, amount, date])
+            writer.writerow([record_id, club, name, desc, expense_type, amount, date])
 
         else:
-            writer.writerow([record_id, club, name, expense_type, -amount, date])
+            writer.writerow([record_id, club, name, desc, expense_type, -amount, date])
     st.success("Submitted!")
     time.sleep(2)
     st.rerun()

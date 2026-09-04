@@ -1,3 +1,5 @@
-Club,Item Name,Type,Amount,Date
-Test Club,Food,Income,122345,2026-09-03
-Test Club,dfsds,Income,234567,2026-09-03
+Club,Item Name,Description,Type,Amount,Date,UUID
+Students' Union,abide,dfghgfr,Income,314,2026-09-01,98c2217b-fb7f-4616-b75c-8d6593a26ded
+Test Club,dr3r,Tefgjnkgbsbf,Income,49087546545390,2026-09-03,78d37a09-2d8e-4842-acef-466ed1fc812d
+Test Club,dfsds,3456,Expense,34564,2026-09-03,35693f38-c8be-4df5-bdab-1d7a7e2f27a7
+Students' Union,eriofjdn,Thing,Expense,23456,2026-09-08,85c4ffa5-cc10-459c-a643-269d368e5e5b
