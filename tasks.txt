@@ -1,1 +1,5 @@
-next up: add club system, club view filtering
+next up: 
+add club system
+club view filtering
+function to check whether the required files login, records files exists
+check whetehr id.txt is automatically created or not
