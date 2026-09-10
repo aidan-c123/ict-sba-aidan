@@ -1,5 +1,5 @@
-Club,Item Name,Description,Type,Amount,Date,UUID
-Students' Union,effaces,dfghgfr,Income,314,2026-09-01,98c2217b-fb7f-4616-b75c-8d6593a26ded
-Students' Union,er,gif,Income,35456,2026-09-01,7b6fcf76-4a32-4abc-98f3-158153d51185
-Test Club,dfsds,3456,Expense,34564,2026-09-03,35693f38-c8be-4df5-bdab-1d7a7e2f27a7
-Students' Union,eriofjdn,Thing,Expense,23456,2026-09-08,85c4ffa5-cc10-459c-a643-269d368e5e5b
+Club,Item Name,Category,Type,Amount,Date,UUID
+Students' Union,er,Membership,Income,35456,2026-09-01,7b6fcf76-4a32-4abc-98f3-158153d51185
+Test Club,dfsds,Venue Rental,Expense,34564,2026-09-03,35693f38-c8be-4df5-bdab-1d7a7e2f27a7
+Students' Union,eriofjdn,Venue Rental,Expense,23456,2026-09-08,85c4ffa5-cc10-459c-a643-269d368e5e5b
+Test Club,dsioghewatgrhae,Entry Fees,Expense,39485,2026-09-10,b55de8bf-03b5-4fa3-81a9-adcc7953d7ca

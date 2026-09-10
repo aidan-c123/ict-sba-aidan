@@ -1,0 +1,19 @@
+Name,Type
+Membership,Income
+School Grant,Income
+Fundraising,Income
+Ticket Sales,Income
+Merchandise Sales,Income
+Donations,Income
+Sponsorship,Income
+Food & Drinks,Expense
+Stationery,Expense
+Printing,Expense
+Merchandise,Expense
+Equipment,Expense
+Decorations,Expense
+Transport,Expense
+Prizes & Gifts,Expense
+Entry Fees,Expense
+Venue Rental,Expense
+Software,Expense
