@@ -1,7 +1,7 @@
 next up: 
-club view filtering
-add club system (old and new ver)
 summary graph and py chart
+add club system
 old version add summary view
 function to check whether the required files login, records files exists
 check whetehr id.txt is automatically created or not
+club view filtering (dataframe editor ver)
