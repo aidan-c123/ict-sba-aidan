@@ -12,17 +12,21 @@ login.close()
 
 st.title("Students' Union Financial Dashboard")
 
-view, add, update, delete = st.tabs(["View Records", "Add Record", "Update record", "Delete Record"])
+summary, view, add, update, delete = st.tabs(["Summary", "View Records", "Add Record", "Update record", "Delete Record"])
 
 df = pd.read_csv('records.csv', index_col=False).sort_values(by="Date", ascending=True)
 copy = df.copy()
-copy["Amount"] = copy["Amount"].abs()
+
+copy["Income_Amt"] = copy["Amount"].where(copy["Type"] == "Income", 0)
+copy["Expense_Amt"] = copy["Amount"].where(copy["Type"] == "Expense", 0)
+
+copy["Cumulative_Income"] = copy["Income_Amt"].cumsum()
+copy["Cumulative_Expense"] = copy["Expense_Amt"].cumsum()
+
 
 cat = pd.read_csv('categories.csv', index_col=False)
 
-with view:
-    st.header("Club Financial Report")
-
+with summary:
     col1, col2 = st.columns(2)
 
     with col1:
@@ -41,8 +45,14 @@ with view:
         st.write(f"Total expenditure = {total_expense}")
         st.write(f"Balance = {total_income - total_expense}")
 
+    st.subheader("Total Balance over Time")
+    st.line_chart(copy, x="Date", y=["Cumulative_Income", "Cumulative_Expense"])
+
+with view:
+    st.header("Club Financial Report")
+
     st.dataframe(
-        copy,
+        df,
         hide_index=True,
         column_config={
             "UUID": st.column_config.Column(width=25),
@@ -54,10 +64,10 @@ with add:
     with st.form("inputRecord", clear_on_submit=True):
         club = st.selectbox("Club:", list(data.keys()), index=None, placeholder="Select club...")
         name = st.text_input("Item Name:")
-        category = st.selectbox("Item Category", list(cat["Name"]))
+        category = st.selectbox("Item Category", list(cat["Name"]), placeholder="Select category...", index=None)
         expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
         amount = st.number_input("Amount ($):", min_value=0.0)
-        date = st.date_input("Date:")
+        date = str(st.date_input("Date:"))
         add_submit = st.form_submit_button("Submit")
 
 if add_submit:
@@ -111,10 +121,10 @@ with update:
                 st.write("Leave input blank if it is not needed to be updated:")
                 club = st.selectbox("Club:", list(data.keys()), index=None, placeholder="Select club...")
                 name = st.text_input("Item Name:")
-                category = st.selectbox("Item Category", list(cat["Name"]))
+                category = st.selectbox("Item Category", list(cat["Name"]), placeholder="Select category...", index = None)
                 expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
                 amount = st.number_input("Amount ($):", min_value=0.0, value=None)
-                date = st.date_input("Date:", value = None)
+                date = str(st.date_input("Date:", value = None))
                 update_confirm = st.form_submit_button("Confirm")
 
             if update_confirm:
@@ -150,7 +160,7 @@ with delete:
     if st.session_state.del_confirm and st.session_state.del_uuid:
         st.write("This is the record that will be deleted:")
 
-        if copy[copy["UUID"] == st.session_state.del_uuid].empty:
+        if df[df["UUID"] == st.session_state.del_uuid].empty:
             st.warning("No record found with that UUID")
             del_clear = st.button("Clear")
             if del_clear:
@@ -159,7 +169,7 @@ with delete:
                 st.rerun()
         else:
             st.dataframe(
-            copy[copy["UUID"] == st.session_state.del_uuid],
+            df[df["UUID"] == st.session_state.del_uuid],
             hide_index=True,
             column_config={
                 "UUID": st.column_config.Column(width=25),
@@ -176,8 +186,6 @@ with delete:
                 st.session_state.del_uuid = ""
                 st.rerun()
         
-
-
 
 with st.bottom:
     leave = st.button("Logout")

@@ -44,7 +44,7 @@ st.session_state.df = st.data_editor(
         "Amount": st.column_config.NumberColumn("Amount", format="dollar"),
         "Date": st.column_config.DateColumn(format="DD.MM.YYYY"),
         "Type": st.column_config.SelectboxColumn(options = ["Income", "Expense"]),
-        "Category": st.column_config.MultiselectColumn(options=["exploration", "visualization", "llm",]),
+        "Category": st.column_config.MultiselectColumn(options=list(cat["Name"]), required=True),
         "UUID": None
     },
     num_rows="dynamic"

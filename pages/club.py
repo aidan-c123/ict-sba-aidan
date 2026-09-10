@@ -24,7 +24,7 @@ with view:
 
     st.subheader("Students' Union Financial Summary")
     total_income = df[np.logical_and(df["Type"]=="Income", df["Club"] == club)]["Amount"].sum()
-    total_expense = -df[np.logical_and(df["Type"]=="Expense", df["Club"] == club)]["Amount"].sum()
+    total_expense = df[np.logical_and(df["Type"]=="Expense", df["Club"] == club)]["Amount"].sum()
     st.write(f"Total income = {total_income}")
     st.write(f"Total expenditure = {total_expense}")
     st.write(f"Balance = {total_income - total_expense}")
@@ -53,12 +53,8 @@ if add_submit:
 
         writer = csv.writer(file)
         record_id = str(uuid.uuid4())
+        writer.writerow([record_id, club, name, desc, expense_type, amount, date])
 
-        if expense_type == "Income":
-            writer.writerow([record_id, club, name, desc, expense_type, amount, date])
-
-        else:
-            writer.writerow([record_id, club, name, desc, expense_type, -amount, date])
     st.success("Submitted!")
     time.sleep(2)
     st.rerun()
@@ -102,27 +98,20 @@ with update:
             with st.form("update_items", clear_on_submit=True):
                 st.write("Leave input blank if it is not needed to be updated:")
                 name = st.text_input("Item Name:")
-                category = 
+                category = st.selectbox("Item Category", list(cat["Name"]))
                 expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
                 amount = st.number_input("Amount ($):", min_value=0.0, value=None)
                 date = st.date_input("Date:", value = None)
                 update_confirm = st.form_submit_button("Confirm")
 
             if update_confirm:
-                if expense_type == "Income" or amount == None:
-                    update_dict = {"Club" : club, "Item Name": name, "Item Desc": desc, "Type" : expense_type, "Amount": amount,"Date": date}
-
-                else:
-                    update_dict = {"Club" : club, "Item Name": name, "Item Desc": desc, "Type" : expense_type, "Amount": -amount,"Date": date}
+                update_dict = {"Club" : club, "Item Name": name,  "Category": category, "Type" : expense_type, "Amount": amount,"Date": date}
                 
                 for i in list(update_dict.keys()):
                     if update_dict[i] is not None and update_dict[i] != "":
                         df.loc[df["UUID"] == st.session_state.update_uuid, i] = update_dict[i]
-                        if i == "Type" and update_dict[i] == "Income" and update_dict["Amount"] == None:
-                            df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"] = abs(df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"])
-                        elif i == "Type" and update_dict[i] == "Expense" and update_dict["Amount"] == None:
-                            df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"] = -abs(df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"])
-                
+                        df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"] = abs(df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"])
+
                 df.to_csv("records.csv", index=False)
                 st.success("Record updated successfully!")
                 time.sleep(2)
