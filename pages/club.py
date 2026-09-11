@@ -13,11 +13,14 @@ club = info[0].strip()
 
 st.title(f"{club} Financial Dashboard")
 
-view, add, update, delete = st.tabs(["View Records", "Add Record", "Update record", "Delete Record"])
+summary, view, add, update, delete = st.tabs(["View Summary", "View Records", "Add Record", "Update record", "Delete Record"])
 
 df = pd.read_csv('records.csv', index_col=False).sort_values(by="Date", ascending=True)
 copy = df.copy()[df["Club"] == club]
 copy["Amount"] = copy["Amount"].abs()
+
+with summary:
+    pass
 
 with view:
     st.header(f"{club} Financial Report")

@@ -5,6 +5,7 @@ import uuid
 import pandas as pd
 import time
 import numpy as np
+import plotly.express as px
 
 login = open("login.json", "r")
 data = json.load(login)
@@ -12,7 +13,7 @@ login.close()
 
 st.title("Students' Union Financial Dashboard")
 
-summary, view, add, update, delete = st.tabs(["Summary", "View Records", "Add Record", "Update record", "Delete Record"])
+total_summary, view, add, update, delete = st.tabs(["View Summary", "View Records", "Add Record", "Update record", "Delete Record"])
 
 df = pd.read_csv('records.csv', index_col=False).sort_values(by="Date", ascending=True)
 copy = df.copy()
@@ -20,13 +21,14 @@ copy = df.copy()
 copy["Income_Amt"] = copy["Amount"].where(copy["Type"] == "Income", 0)
 copy["Expense_Amt"] = copy["Amount"].where(copy["Type"] == "Expense", 0)
 
-copy["Cumulative_Income"] = copy["Income_Amt"].cumsum()
-copy["Cumulative_Expense"] = copy["Expense_Amt"].cumsum()
+copy["Cumulative Income"] = copy["Income_Amt"].cumsum()
+copy["Cumulative Expense"] = copy["Expense_Amt"].cumsum()
+copy["Cumulative Balance"] = copy["Cumulative Income"] - copy["Cumulative Expense"]
 
 
 cat = pd.read_csv('categories.csv', index_col=False)
 
-with summary:
+with total_summary:
     col1, col2 = st.columns(2)
 
     with col1:
@@ -46,7 +48,19 @@ with summary:
         st.write(f"Balance = {total_income - total_expense}")
 
     st.subheader("Total Balance over Time")
-    st.line_chart(copy, x="Date", y=["Cumulative_Income", "Cumulative_Expense"])
+    st.line_chart(copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
+
+    cola, colb = st.columns(2)
+
+    with cola:
+        st.subheader("Total Income by Category")
+        income_pie = px.pie(copy[copy["Type"]=="Income"], values="Income_Amt", names="Category")
+        st.plotly_chart(income_pie)
+    with colb:
+        st.subheader("Total Expense by Category")
+        expense_pie = px.pie(copy[copy["Type"]=="Expense"], values="Expense_Amt", names="Category")
+        st.plotly_chart(expense_pie)
+        expense_pie.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20)
 
 with view:
     st.header("Club Financial Report")
