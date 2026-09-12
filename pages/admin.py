@@ -4,7 +4,6 @@ import csv
 import uuid
 import pandas as pd
 import time
-import numpy as np
 import plotly.express as px
 
 login = open("login.json", "r")
@@ -13,57 +12,76 @@ login.close()
 
 st.title("Students' Union Financial Dashboard")
 
-total_summary, view, add, update, delete = st.tabs(["View Summary", "View Records", "Add Record", "Update record", "Delete Record"])
+total_summary, club_summary, view, add, update, delete = st.tabs(["View Master Summary", "View Club Summary", "View Records", "Add Record", "Update record", "Delete Record"])
 
 df = pd.read_csv('records.csv', index_col=False).sort_values(by="Date", ascending=True)
 copy = df.copy()
-
-copy["Income_Amt"] = copy["Amount"].where(copy["Type"] == "Income", 0)
-copy["Expense_Amt"] = copy["Amount"].where(copy["Type"] == "Expense", 0)
-
-copy["Cumulative Income"] = copy["Income_Amt"].cumsum()
-copy["Cumulative Expense"] = copy["Expense_Amt"].cumsum()
-copy["Cumulative Balance"] = copy["Cumulative Income"] - copy["Cumulative Expense"]
-
+su_copy = df.copy()[df["Club"] == "Students' Union"]
 
 cat = pd.read_csv('categories.csv', index_col=False)
 
 with total_summary:
-    col1, col2 = st.columns(2)
 
-    with col1:
-        st.subheader("Total Financial Summary")
-        total_income = df[df["Type"]=="Income"]["Amount"].sum()
-        total_expense = df[df["Type"]=="Expense"]["Amount"].sum()
-        st.write(f"Total income = {total_income}")
-        st.write(f"Total expenditure = {total_expense}")
-        st.write(f"Balance = {total_income - total_expense}")
+    copy["Income_Amt"] = copy["Amount"].where(copy["Type"] == "Income", 0)
+    copy["Expense_Amt"] = copy["Amount"].where(copy["Type"] == "Expense", 0)
 
-    with col2:
-        st.subheader("Students' Union Financial Summary")
-        total_income = df[np.logical_and(df["Type"]=="Income", df["Club"] == "Students' Union")]["Amount"].sum()
-        total_expense = df[np.logical_and(df["Type"]=="Expense", df["Club"] == "Students' Union")]["Amount"].sum()
-        st.write(f"Total income = {total_income}")
-        st.write(f"Total expenditure = {total_expense}")
-        st.write(f"Balance = {total_income - total_expense}")
+    copy["Cumulative Income"] = copy["Income_Amt"].cumsum()
+    copy["Cumulative Expense"] = copy["Expense_Amt"].cumsum()
+    copy["Cumulative Balance"] = copy["Cumulative Income"] - copy["Cumulative Expense"]
+
+    st.subheader("Total Financial Summary")
+    total_income = copy[copy["Type"]=="Income"]["Amount"].sum()
+    total_expense = copy[copy["Type"]=="Expense"]["Amount"].sum()
+    st.write(f"Total income = {total_income}")
+    st.write(f"Total expenditure = {total_expense}")
+    st.write(f"Balance = {total_income - total_expense}")
 
     st.subheader("Total Balance over Time")
     st.line_chart(copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
 
-    cola, colb = st.columns(2)
+    col1, col2 = st.columns(2)
 
-    with cola:
-        st.subheader("Total Income by Category")
-        income_pie = px.pie(copy[copy["Type"]=="Income"], values="Income_Amt", names="Category")
+    with col1:
+        income_pie = px.pie(copy[copy["Type"]=="Income"], values="Income_Amt", names="Category", title="Total Income by Category")
         st.plotly_chart(income_pie)
-    with colb:
-        st.subheader("Total Expense by Category")
-        expense_pie = px.pie(copy[copy["Type"]=="Expense"], values="Expense_Amt", names="Category")
+    with col2:
+        expense_pie = px.pie(copy[copy["Type"]=="Expense"], values="Expense_Amt", names="Category", title="Total Expense by Category")
         st.plotly_chart(expense_pie)
         expense_pie.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20)
 
+
+
+with club_summary:
+
+    su_copy["Income_Amt"] = su_copy["Amount"].where(su_copy["Type"] == "Income", 0)
+    su_copy["Expense_Amt"] = su_copy["Amount"].where(su_copy["Type"] == "Expense", 0)
+
+    su_copy["Cumulative Income"] = su_copy["Income_Amt"].cumsum()
+    su_copy["Cumulative Expense"] = su_copy["Expense_Amt"].cumsum()
+    su_copy["Cumulative Balance"] = su_copy["Cumulative Income"] - su_copy["Cumulative Expense"]
+
+    st.subheader("Student's Union Financial Summary")
+    total_income = su_copy[su_copy["Type"]=="Income"]["Amount"].sum()
+    total_expense = su_copy[su_copy["Type"]=="Expense"]["Amount"].sum()
+    st.write(f"Total income = {total_income}")
+    st.write(f"Total expenditure = {total_expense}")
+    st.write(f"Balance = {total_income - total_expense}")
+
+
+    st.subheader("Total Balance over Time")
+    st.line_chart(su_copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        clubincome_pie = px.pie(su_copy[su_copy["Type"]=="Income"], values="Income_Amt", names="Category", title="Total Income by Category")
+        st.plotly_chart(clubincome_pie, key="erkghhgoirhgeoirrex")
+    with col2:
+        clubexpense_pie = px.pie(su_copy[su_copy["Type"]=="Expense"], values="Expense_Amt", names="Category", title="Total Expense by Category")
+        st.plotly_chart(clubexpense_pie, key='zdfkghzd fdku')
+
 with view:
-    st.header("Club Financial Report")
+    st.header("Clubs' Financial Report")
 
     st.dataframe(
         df,

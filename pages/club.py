@@ -4,7 +4,7 @@ import csv
 import uuid
 import pandas as pd
 import time
-import numpy as np
+import plotly.express as px
 
 f = open("id.txt", "r")
 info = f.readlines()
@@ -19,22 +19,40 @@ df = pd.read_csv('records.csv', index_col=False).sort_values(by="Date", ascendin
 copy = df.copy()[df["Club"] == club]
 copy["Amount"] = copy["Amount"].abs()
 
+cat = pd.read_csv('categories.csv', index_col=False)
+
 with summary:
-    pass
+    copy["Income_Amt"] = copy["Amount"].where(copy["Type"] == "Income", 0)
+    copy["Expense_Amt"] = copy["Amount"].where(copy["Type"] == "Expense", 0)
 
-with view:
-    st.header(f"{club} Financial Report")
-
-    st.subheader("Students' Union Financial Summary")
-    total_income = df[np.logical_and(df["Type"]=="Income", df["Club"] == club)]["Amount"].sum()
-    total_expense = df[np.logical_and(df["Type"]=="Expense", df["Club"] == club)]["Amount"].sum()
+    copy["Cumulative Income"] = copy["Income_Amt"].cumsum()
+    copy["Cumulative Expense"] = copy["Expense_Amt"].cumsum()
+    copy["Cumulative Balance"] = copy["Cumulative Income"] - copy["Cumulative Expense"]
+    st.subheader("Total Financial Summary")
+    total_income = copy[copy["Type"]=="Income"]["Amount"].sum()
+    total_expense = copy[copy["Type"]=="Expense"]["Amount"].sum()
     st.write(f"Total income = {total_income}")
     st.write(f"Total expenditure = {total_expense}")
     st.write(f"Balance = {total_income - total_expense}")
-    
+
+    st.subheader("Total Balance over Time")
+    st.line_chart(copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        income_pie = px.pie(copy[copy["Type"]=="Income"], values="Income_Amt", names="Category", title="Total Income by Category")
+        st.plotly_chart(income_pie)
+    with col2:
+        expense_pie = px.pie(copy[copy["Type"]=="Expense"], values="Expense_Amt", names="Category", title="Total Expense by Category")
+        st.plotly_chart(expense_pie)
+        expense_pie.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20)
+
+with view:
+    st.header(f"{club} Financial Report")
     
     st.dataframe(
-        copy,
+        df[df["Club"] == club],
         hide_index=True,
         column_config={
             "UUID": st.column_config.Column(width=25),
@@ -45,7 +63,7 @@ with view:
 with add:
     with st.form("inputRecord", clear_on_submit=True):
         name = st.text_input("Item Name:")
-        desc = st.text_input("Item Description")
+        category = st.selectbox("Item Category", list(cat["Name"]), placeholder="Select category...", index=None)
         expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
         amount = st.number_input("Amount ($):", min_value=0.0)
         date = st.date_input("Date:")
@@ -56,7 +74,7 @@ if add_submit:
 
         writer = csv.writer(file)
         record_id = str(uuid.uuid4())
-        writer.writerow([record_id, club, name, desc, expense_type, amount, date])
+        writer.writerow([record_id, club, name, category, expense_type, amount, date])
 
     st.success("Submitted!")
     time.sleep(2)
