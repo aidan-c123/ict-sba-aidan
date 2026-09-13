@@ -1,5 +1,4 @@
 next up: 
-summary graph and py chart
 add club system
 old version add summary view
 function to check whether the required files login, records files exists
