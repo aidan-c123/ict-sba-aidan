@@ -15,6 +15,8 @@ club = st.selectbox("Club:", list(data.keys()), index=None, placeholder="Select 
 
 pwd = st.text_input("Password:", type="password")
 
+st.write("Contact Students' Union if Forgotten Password")
+
 
 submit = st.button("Login")
 

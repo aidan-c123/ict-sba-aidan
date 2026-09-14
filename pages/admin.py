@@ -219,7 +219,29 @@ with edit_records:
                     st.session_state.del_confirm = False
                     st.session_state.del_uuid = ""
                     st.rerun()
-        
+
+
+with edit_users:
+    login = open("login.json", "r")
+    users = pd.DataFrame.from_dict(dict(json.load(login)), orient="index", columns=["Password"])
+    users = users.reset_index().rename(columns={"index": "Club"})
+    login.close()
+
+    if st.button("Save Changes"):
+        users.update(st.session_state.users)
+        updated_dict = st.session_state.users.set_index("Club")["Password"].to_dict()
+
+        with open("login.json", "w") as login:
+            json.dump(updated_dict, login, indent=4)
+
+        st.success("Saved!")
+        time.sleep(1)
+        st.rerun()
+    
+    st.session_state.users = st.data_editor(users, hide_index=True, num_rows="dynamic")
+
+    
+
 
 with st.bottom:
     leave = st.button("Logout")

@@ -17,7 +17,6 @@ summary, view, edit= st.tabs(["View Summary", "View Records", "Edit Records"])
 
 df = pd.read_csv('records.csv', index_col=False).sort_values(by="Date", ascending=True)
 copy = df.copy()[df["Club"] == club]
-copy["Amount"] = copy["Amount"].abs()
 
 cat = pd.read_csv('categories.csv', index_col=False)
 
@@ -75,7 +74,7 @@ with edit:
         with open('records.csv', 'a', newline="") as file:
             writer = csv.writer(file)
             record_id = str(uuid.uuid4())
-            writer.writerow([record_id, club, name, category, expense_type, amount, date])
+            writer.writerow([club, name, category, expense_type, amount, date, record_id])
 
         st.success("Submitted!")
         time.sleep(2)
