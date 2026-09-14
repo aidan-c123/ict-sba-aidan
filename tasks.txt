@@ -1,6 +1,6 @@
 next up: 
-add club system
 category system
+unable to rename club name but depends of u want
 function to check whether the required files login, records files exists
 club view filtering (dataframe editor ver)
 old version add summary view
