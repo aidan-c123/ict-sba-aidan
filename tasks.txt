@@ -1,6 +1,6 @@
 next up: 
 add club system
-old version add summary view
+category system
 function to check whether the required files login, records files exists
-check whetehr id.txt is automatically created or not
 club view filtering (dataframe editor ver)
+old version add summary view
