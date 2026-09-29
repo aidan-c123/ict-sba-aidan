@@ -6,7 +6,6 @@ title = st.title("Club Financial Report")
 st.set_page_config(page_title="SJC Club Financial Management System", page_icon=None, initial_sidebar_state="collapsed")
 
 f = open("id.txt", "w")
-club = ""
 login = open("login.json", "r")
 data = json.load(login)
 
