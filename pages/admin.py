@@ -37,7 +37,7 @@ with total_summary:
     st.write(f"Balance = {total_income - total_expense}")
 
     st.subheader("Total Balance over Time")
-    st.line_chart(copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
+    line = st.line_chart(copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
 
     col1, col2 = st.columns(2)
 
@@ -69,7 +69,7 @@ with club_summary:
 
 
     st.subheader("Total Balance over Time")
-    st.line_chart(su_copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
+    line = st.line_chart(su_copy, x="Date", y=["Cumulative Income", "Cumulative Expense", "Cumulative Balance"])
 
     col1, col2 = st.columns(2)
 
