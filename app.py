@@ -1,7 +1,7 @@
 import streamlit as st
 import json
 
-st.title("Club Financial Report")
+title = st.title("Club Financial Report")
 
 st.set_page_config(page_title="SJC Club Financial Management System", page_icon=None, initial_sidebar_state="collapsed")
 

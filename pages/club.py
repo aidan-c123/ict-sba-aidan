@@ -11,7 +11,7 @@ info = f.readlines()
 f.close()
 club = info[0].strip()
 
-st.title(f"{club} Financial Dashboard")
+title = st.title(f"{club} Financial Dashboard")
 
 summary, view, edit= st.tabs(["View Summary", "View Records", "Edit Records"])
 
@@ -119,7 +119,7 @@ with edit:
                 with st.form("update_items", clear_on_submit=True):
                     st.write("Leave input blank if it is not needed to be updated:")
                     name = st.text_input("Item Name:")
-                    category = st.selectbox("Item Category", list(cat["Name"]))
+                    category = st.selectbox("Item Category", list(cat["Name"]), placeholder="Select category...", index = None)
                     expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
                     amount = st.number_input("Amount ($):", min_value=0.0, value=None)
                     date = st.date_input("Date:", value = None)

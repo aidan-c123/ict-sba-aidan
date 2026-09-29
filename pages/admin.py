@@ -10,7 +10,7 @@ login = open("login.json", "r")
 data = json.load(login)
 login.close()
 
-st.title("Students' Union Financial Dashboard")
+title = st.title("Students' Union Financial Dashboard")
 
 total_summary, club_summary, view, edit_records, edit_users = st.tabs(["View Master Summary", "View Club Summary", "View Records", "Edit Records", "Edit Users"])
 
