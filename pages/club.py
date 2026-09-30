@@ -67,7 +67,7 @@ with edit:
             category = st.selectbox("Item Category", list(cat["Name"]), placeholder="Select category...", index=None)
             expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
             amount = st.number_input("Amount ($):", min_value=0.0)
-            date = st.date_input("Date:")
+            date = str(st.date_input("Date:"))
             add_submit = st.form_submit_button("Submit")
 
     if add_submit:
@@ -122,7 +122,7 @@ with edit:
                     category = st.selectbox("Item Category", list(cat["Name"]), placeholder="Select category...", index = None)
                     expense_type = st.radio("Is this an income or expense?", ["Income", "Expense"], index=None, horizontal=True)
                     amount = st.number_input("Amount ($):", min_value=0.0, value=None)
-                    date = st.date_input("Date:", value = None)
+                    date = str(st.date_input("Date:", value = None))
                     update_confirm = st.form_submit_button("Confirm")
 
                 if update_confirm:
