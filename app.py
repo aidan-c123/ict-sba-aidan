@@ -16,12 +16,10 @@ pwd = st.text_input("Password:", type="password")
 
 st.write("Contact Students' Union if Forgotten Password")
 
-
 submit = st.button("Login")
 
 if submit:
     f.write(club)
-
     if pwd == data[club]:
         st.success("Login successful")
 
@@ -33,5 +31,6 @@ if submit:
 
     else:
         st.error("Incorrect password")
+
 
 f.close()

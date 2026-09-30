@@ -131,7 +131,6 @@ with edit:
                     for i in list(update_dict.keys()):
                         if update_dict[i] is not None and update_dict[i] != "":
                             df.loc[df["UUID"] == st.session_state.update_uuid, i] = update_dict[i]
-                            df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"] = abs(df.loc[df["UUID"] == st.session_state.update_uuid, "Amount"])
 
                     df.to_csv("records.csv", index=False)
                     st.success("Record updated successfully!")
